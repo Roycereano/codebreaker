@@ -9,5 +9,5 @@ order: 0
 
 ## Design documentation 
 
-* [Wireframe](x/wireframe.md)
+* [Wireframe](wireframe.md)
  

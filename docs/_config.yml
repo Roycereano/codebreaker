@@ -5,6 +5,7 @@ description: A code-breaking solitaire puzzle game.
 
 author:
   name: Royce Reano
+  copyright: false
 
 page_navigator:
   enabled: true
