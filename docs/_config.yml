@@ -1,0 +1,13 @@
+remote_theme: ddc-java/ddc-dav
+
+title: Codebreaker
+description: A code-breaking solitaire puzzle game.
+
+author:
+  name: Royce Reano
+
+page_navigator:
+  enabled: true
+
+titles_from_headings:
+  enabled: false
