@@ -1,7 +1,9 @@
 package edu.cnm.deepdive.codebreaker.service;
 
+import android.os.Build;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import edu.cnm.deepdive.codebreaker.BuildConfig;
 import edu.cnm.deepdive.codebreaker.model.Game;
 import edu.cnm.deepdive.codebreaker.model.Guess;
 import io.reactivex.Single;
@@ -10,6 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -42,8 +45,9 @@ public interface WebServiceProxy {
           .addInterceptor(interceptor)
           .build();
       Retrofit retrofit = new Retrofit.Builder()
-          .baseUrl("https://ddc-java.services/codebreaker/")
+          .baseUrl(BuildConfig.BASE_URL)
           .addConverterFactory(GsonConverterFactory.create(gson))
+          .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
           .client(client)
           .build();
       INSTANCE = retrofit.create(WebServiceProxy.class);
