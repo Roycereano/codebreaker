@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import edu.cnm.deepdive.codebreaker.adapter.GuessItemAdapter;
 import edu.cnm.deepdive.codebreaker.databinding.FragmentPlayBinding;
 import edu.cnm.deepdive.codebreaker.viewmodel.MainViewModel;
 import org.jetbrains.annotations.NotNull;
@@ -32,11 +33,15 @@ public class PlayFragment extends Fragment {
     super.onViewCreated(view, savedInstanceState);
     viewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
     viewModel.getThrowable().observe(getViewLifecycleOwner(), (throwable) -> {
-          if (throwable != null) {
-            Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-          }
-        }
-    );
+      if (throwable != null) {
+        Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+      }
+    });
+    viewModel.getGame().observe(getViewLifecycleOwner(), (game) -> {
+      GuessItemAdapter adapter = new GuessItemAdapter(getContext(), game.getGuesses());
+      binding.guesses.setAdapter(adapter);
+      binding.guessContainer.setVisibility(game.isSolved() ? View.GONE : View.VISIBLE);
+    });
   }
 
   @Override
