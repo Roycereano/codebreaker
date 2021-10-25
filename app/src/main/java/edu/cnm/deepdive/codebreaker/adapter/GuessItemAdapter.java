@@ -32,7 +32,7 @@ public class GuessItemAdapter extends Adapter<Holder> {
 
   @Override
   public void onBindViewHolder(@NonNull Holder holder, int position) {
-
+    holder.bind(position);
   }
 
   @Override
