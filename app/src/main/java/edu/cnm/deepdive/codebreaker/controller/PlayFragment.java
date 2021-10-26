@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.adapter.GuessItemAdapter;
 import edu.cnm.deepdive.codebreaker.databinding.FragmentPlayBinding;
+import edu.cnm.deepdive.codebreaker.model.Game;
 import edu.cnm.deepdive.codebreaker.viewmodel.MainViewModel;
 import java.util.Locale;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +43,7 @@ public class PlayFragment extends Fragment implements InputFilter {
     binding = FragmentPlayBinding.inflate(inflater, container, false);
     binding.submit.setOnClickListener((v) ->
         viewModel.submitGuess(binding.guess.getText().toString().trim()));
+    binding.guess.setFilters(new InputFilter[]{this});
     return binding.getRoot();
   }
 
@@ -54,21 +56,16 @@ public class PlayFragment extends Fragment implements InputFilter {
         Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
       }
     });
-    viewModel.getGame().observe(getViewLifecycleOwner(), (game) -> {
-      GuessItemAdapter adapter = new GuessItemAdapter(getContext(), game.getGuesses());
-      binding.guesses.setAdapter(adapter);
-      binding.guessContainer.setVisibility(game.isSolved() ? View.GONE : View.VISIBLE);
-      codeLength = game.getLength();
-      pool = game.getPool();
-      illegalCharacters = String.format(ILLEGAL_CHARACTERS_FORMAT, pool);
-      // TODO Enforce submit conditions.
-    });
+    viewModel.getGame().observe(getViewLifecycleOwner(), this::update);
   }
+
 
   @Override
   public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
     boolean handled = true;
     if (item.getItemId() == R.id.new_game) {
+      handled = true;
+      binding.guess.getText().clear();
       viewModel.startGame();
     } else {
       handled = super.onOptionsItemSelected(item);
@@ -99,10 +96,25 @@ public class PlayFragment extends Fragment implements InputFilter {
     StringBuilder builder = new StringBuilder(dest);
     builder.replace(dstart, dend, modifiedSource);
     if (builder.length() > codeLength) {
-      modifiedSource = modifiedSource.substring(0, modifiedSource.length() - (builder.length() - codeLength));
+      modifiedSource = modifiedSource.substring(0,
+          modifiedSource.length() - (builder.length() - codeLength));
     }
     int newLength = dest.length() - (dend - dstart) + modifiedSource.length();
-    binding.submit.setEnabled(newLength == codeLength);
+    checkSumbitConditions(newLength);
     return modifiedSource;
+  }
+
+  private void update(Game game) {
+    GuessItemAdapter adapter = new GuessItemAdapter(getContext(), game.getGuesses());
+    binding.guesses.setAdapter(adapter);
+    binding.guessContainer.setVisibility(game.isSolved() ? View.GONE : View.VISIBLE);
+    codeLength = game.getLength();
+    pool = game.getPool();
+    illegalCharacters = String.format(ILLEGAL_CHARACTERS_FORMAT, pool);
+    checkSumbitConditions(binding.guess.getText().toString().trim().length());
+  }
+
+  private void checkSumbitConditions(int length) {
+    binding.submit.setEnabled(length == codeLength);
   }
 }
