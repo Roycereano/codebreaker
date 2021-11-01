@@ -11,6 +11,7 @@ public class CodeBreakerApplication extends Application {
   public void onCreate() {
     super.onCreate();
     Stetho.initializeWithDefaults(this);
+    CodebreakerDatabase.setContext(this);
     CodebreakerDatabase
         .getInstance()
         .getGameDao()
