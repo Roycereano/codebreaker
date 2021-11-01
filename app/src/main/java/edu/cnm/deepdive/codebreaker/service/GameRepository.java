@@ -14,30 +14,36 @@ public class GameRepository {
   }
 
   public Single<Game> startGame(String pool, int length) {
-   return Single
-       .fromCallable(() -> {
-         Game game = new Game();
-         game.setPool(pool);
-         game.setLength(length);
-         return game;
-       })
-       .flatMap(proxy:: startGame)
-       .subscribeOn(Schedulers.io());
+    return Single
+        .fromCallable(() -> {
+          Game game = new Game();
+          game.setPool(pool);
+          game.setLength(length);
+          return game;
+        })
+        .flatMap(proxy::startGame)
+        .subscribeOn(Schedulers.io());
   }
 
   public Single<Game> submitGuess(Game game, String text) {
     return Single
         .fromCallable(() -> {
-      Guess guess = new Guess();
-      guess.setText(text);
-      return guess;
-    })
-    .flatMap((guess) -> proxy.submitGuess(guess, game.getServiceKey()))
+          Guess guess = new Guess();
+          guess.setText(text);
+          return guess;
+        })
+        .flatMap((guess) -> proxy.submitGuess(guess, game.getServiceKey()))
         .map((guess) -> {
           game.getGuesses().add(guess);
           game.setSolved(guess.isSolution());
           return game;
         })
+//        .flatMap((g) -> {
+//          if (g.isSolved()) {
+//
+//          }
+//          return g;
+//        })
         .subscribeOn(Schedulers.io());
   }
 }

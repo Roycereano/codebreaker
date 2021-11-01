@@ -27,7 +27,7 @@ public class Game {
   @NonNull
   @Expose
   @SerializedName("id")
-  @ColumnInfo(name = "service_key", index = true)
+  @ColumnInfo(name = "service_key")
   private String serviceKey;
 
   @NonNull
