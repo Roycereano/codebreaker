@@ -75,7 +75,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$roomVersion"
 
     // GSon library
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     // Retrofit libraries
     def retrofitVersion = '2.9.0'
