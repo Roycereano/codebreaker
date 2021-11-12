@@ -4,20 +4,24 @@ import android.app.Application;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.Lifecycle.Event;
+import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.OnLifecycleEvent;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
+import edu.cnm.deepdive.codebreaker.model.entity.Guess;
 import edu.cnm.deepdive.codebreaker.service.GameRepository;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class MainViewModel extends AndroidViewModel {
+public class PlayViewModel extends AndroidViewModel implements LifecycleObserver {
 
   private final GameRepository repository;
   private final MutableLiveData<Game> game;
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
 
-  public MainViewModel(@NonNull Application application) {
+  public PlayViewModel(@NonNull Application application) {
     super(application);
     repository = new GameRepository();
     game = new MutableLiveData<>();
@@ -36,11 +40,14 @@ public class MainViewModel extends AndroidViewModel {
 
   public void startGame() {
     throwable.postValue(null);
+    Game game = new Game();
+    game.setPool("ABCDEF");
+    game.setLength(3);
     pending.add(
         repository
-            .startGame("ABCDEF", 3)
+            .save(game)
             .subscribe(
-                game::postValue,
+                this.game::postValue,
                 this::postThrowable
 
             )
@@ -49,6 +56,8 @@ public class MainViewModel extends AndroidViewModel {
 
   public void submitGuess(String text) {
     throwable.postValue(null);
+    Guess guess = new Guess();
+    guess.setText(text);
     pending.add(
         repository
             .submitGuess(game.getValue(), text)
@@ -57,6 +66,11 @@ public class MainViewModel extends AndroidViewModel {
                 this::postThrowable
             )
     );
+  }
+
+  @OnLifecycleEvent(Event.ON_STOP)
+  private void clearPending() {
+    pending.clear();
   }
 
   private void postThrowable(Throwable throwable) {

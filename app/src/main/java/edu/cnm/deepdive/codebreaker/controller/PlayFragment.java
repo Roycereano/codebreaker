@@ -18,13 +18,13 @@ import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.adapter.GuessItemAdapter;
 import edu.cnm.deepdive.codebreaker.databinding.FragmentPlayBinding;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
-import edu.cnm.deepdive.codebreaker.viewmodel.MainViewModel;
+import edu.cnm.deepdive.codebreaker.viewmodel.PlayViewModel;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayFragment extends Fragment implements InputFilter {
 
   private static final String ILLEGAL_CHARACTERS_FORMAT = "[^%s]+";
-  private MainViewModel viewModel;
+  private PlayViewModel viewModel;
   private FragmentPlayBinding binding;
   private int codeLength;
   private String pool;
@@ -49,7 +49,7 @@ public class PlayFragment extends Fragment implements InputFilter {
   @Override
   public void onViewCreated(@NonNull @NotNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    viewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
+    viewModel = new ViewModelProvider(getActivity()).get(PlayViewModel.class);
     viewModel.getThrowable().observe(getViewLifecycleOwner(), (throwable) -> {
       if (throwable != null) {
         Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
