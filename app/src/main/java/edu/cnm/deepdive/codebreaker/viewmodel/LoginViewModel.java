@@ -1,8 +1,10 @@
 package edu.cnm.deepdive.codebreaker.viewmodel;
 
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
 import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.DefaultLifecycleObserver;
@@ -48,6 +50,10 @@ public class LoginViewModel extends AndroidViewModel implements DefaultLifecycle
                 (throwable) -> account.postValue(null)
             )
     );
+  }
+
+  public void startSignIn(ActivityResultLauncher<Intent> launcher) {
+    repository.startSignIn(launcher);
   }
 
   public void completeSignIn(ActivityResult result) {

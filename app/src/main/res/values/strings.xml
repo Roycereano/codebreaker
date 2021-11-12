@@ -13,4 +13,5 @@
   <string name="menu_slideshow">Slideshow</string>
   <string name="guess_hint">Text of guess</string>
   <string name="login_failure_message">Unable to sign in with the provided credentials.</string>
+  <string name="sign_out">Sign out</string>
 </resources>

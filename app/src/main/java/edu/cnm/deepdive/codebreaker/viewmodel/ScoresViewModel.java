@@ -16,8 +16,8 @@ public class ScoresViewModel extends AndroidViewModel {
     repository = new GameRepository();
   }
 
-  public LiveData<List<GameSummary>> getGames() {
-    return repository.getOrderedByGuessCount(6, 3); // TODO Take values from shared preferences.
-  }
+//  public LiveData<List<GameSummary>> getGames() {
+//    return repository.getOrderedByGuessCount(6, 3); // TODO Take values from shared preferences.
+//  }
 
 }
