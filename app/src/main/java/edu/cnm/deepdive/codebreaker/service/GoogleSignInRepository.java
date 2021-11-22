@@ -1,9 +1,7 @@
 package edu.cnm.deepdive.codebreaker.service;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
-import android.service.carrier.CarrierMessagingService.SendMmsResult;
 import android.util.Log;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -13,7 +11,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import edu.cnm.deepdive.codebreaker.BuildConfig;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
@@ -27,14 +24,14 @@ public class GoogleSignInRepository {
 
   private final GoogleSignInClient client;
 
-  private GoogleSignInAccount account;
 
   private GoogleSignInRepository() {
     GoogleSignInOptions options = new GoogleSignInOptions.Builder()
         .requestEmail()
         .requestId()
         .requestProfile()
-        .requestIdToken(BuildConfig.CLIENT_ID)
+        // TODO Uncomment following line after branching for example capstone client.
+//        .requestIdToken(BuildConfig.CLIENT_ID)
         .build();
     client = GoogleSignIn.getClient(context, options);
   }
@@ -52,7 +49,7 @@ public class GoogleSignInRepository {
         .create((SingleOnSubscribe<GoogleSignInAccount>) (emitter) ->
             client
                 .silentSignIn()
-                .addOnSuccessListener(this::setAccount)
+//                .addOnSuccessListener(this::logAccount)
                 .addOnSuccessListener(emitter::onSuccess)
                 .addOnFailureListener(emitter::onError)
         )
@@ -75,7 +72,7 @@ public class GoogleSignInRepository {
             Task<GoogleSignInAccount> task =
                 GoogleSignIn.getSignedInAccountFromIntent(result.getData());
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            setAccount(account);
+            logAccount(account);
             emitter.onSuccess(account);
           } catch (ApiException e) {
             emitter.onError(e);
@@ -91,14 +88,13 @@ public class GoogleSignInRepository {
             client
                 .signOut()
                 .addOnSuccessListener((ignored) -> emitter.onComplete())
-                .addOnCompleteListener((ignored) -> setAccount(null))
+//                .addOnCompleteListener((ignored) -> logAccount(null))
                 .addOnFailureListener(emitter::onError)
         )
         .subscribeOn(Schedulers.io());
   }
 
-  private void setAccount(GoogleSignInAccount account) {
-    this.account = account;
+  private void logAccount(GoogleSignInAccount account) {
     if (account != null) {
       Log.d(getClass().getSimpleName(),
           account.getIdToken() != null ? getBearerToken(account) : "none");

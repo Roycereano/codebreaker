@@ -12,7 +12,7 @@ import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.databinding.ActivityLoginBinding;
 import edu.cnm.deepdive.codebreaker.viewmodel.LoginViewModel;
 
-public class LoginActivity extends AppCompatActivity {
+public class  LoginActivity extends AppCompatActivity {
 
   private ActivityLoginBinding binding;
   private LoginViewModel viewModel;

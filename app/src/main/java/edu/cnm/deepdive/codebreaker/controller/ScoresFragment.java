@@ -11,7 +11,6 @@ import edu.cnm.deepdive.codebreaker.viewmodel.ScoresViewModel;
 
 //public class ScoresFragment extends Fragment {
 //
-//  private ScoresViewModel viewModel;
 //  private FragmentScoresBinding binding;
 //
 //  public View onCreateView(@NonNull LayoutInflater inflater,

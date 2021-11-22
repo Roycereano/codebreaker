@@ -3,11 +3,9 @@ package edu.cnm.deepdive.codebreaker.controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Menu;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import edu.cnm.deepdive.codebreaker.MobileNavigationDirections;
 import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.databinding.ActivityMainBinding;
 import edu.cnm.deepdive.codebreaker.viewmodel.LoginViewModel;
@@ -24,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
   private AppBarConfiguration appBarConfiguration;
   private ActivityMainBinding binding;
   private LoginViewModel loginViewModel;
+  private NavController navController;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
     // Passing each menu ID as a set of Ids because each
     // menu should be considered as top level destinations.
     appBarConfiguration = new AppBarConfiguration.Builder(
-        R.id.nav_play, R.id.nav_gallery, R.id.nav_slideshow)
+        R.id.nav_play, R.id.nav_gallery)
         .setDrawerLayout(drawer)
         .build();
-    NavController navController = Navigation.findNavController(this,
+    navController = Navigation.findNavController(this,
         R.id.nav_host_fragment_content_main);
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     NavigationUI.setupWithNavController(navigationView, navController);
@@ -67,8 +67,12 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     boolean handled;
-    if (item.getItemId() == R.id.sign_out) {
+    int itemId = item.getItemId();
+    if (itemId == R.id.sign_out) {
       loginViewModel.signOut();
+      handled = true;
+    } else if (itemId == R.id.action_settings) {
+      navController.navigate(MobileNavigationDirections.openSettings());
       handled = true;
     } else {
       handled = super.onOptionsItemSelected(item);

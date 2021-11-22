@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/nav_play">
+
+  <action
+      android:id="@+id/open_settings"
+      app:destination="@id/nav_settings"/>
 
     <fragment
         android:id="@+id/nav_play"
@@ -18,8 +23,7 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="edu.cnm.deepdive.codebreaker.controller.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_settings"
+        android:name="edu.cnm.deepdive.codebreaker.controller.SettingsFragment"
+        android:label="@string/menu_settings"/>
 </navigation>
